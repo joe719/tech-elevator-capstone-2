@@ -1,9 +1,12 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.models.AuthenticatedUser;
+import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
+import com.techelevator.tenmo.services.TransferService;
+import com.techelevator.tenmo.services.TransferServiceException;
 import com.techelevator.view.ConsoleService;
 
 public class App {
@@ -51,7 +54,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			if(MAIN_MENU_OPTION_VIEW_BALANCE.equals(choice)) {
 				viewCurrentBalance();
 			} else if(MAIN_MENU_OPTION_VIEW_PAST_TRANSFERS.equals(choice)) {
-				viewTransferHistory();
+				try {
+					viewTransferHistory();
+				} catch (TransferServiceException e) {
+					e.printStackTrace();
+				}
 			} else if(MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS.equals(choice)) {
 				viewPendingRequests();
 			} else if(MAIN_MENU_OPTION_SEND_BUCKS.equals(choice)) {
@@ -71,9 +78,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		// TODO Auto-generated method stub
 		
 	}
-
-	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
+	
+	private Transfer[] viewTransferHistory() throws TransferServiceException {
+		TransferService ts = new TransferService();
+		
+		return ts.viewTransferHistory();
 		
 	}
 
