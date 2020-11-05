@@ -1,7 +1,9 @@
 package com.techelevator.tenmo;
 
+import com.techelevator.tenmo.models.Account;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.UserCredentials;
+import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.view.ConsoleService;
@@ -70,6 +72,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void viewCurrentBalance() {
 		// TODO Auto-generated method stub
 		
+		
 	}
 
 	private void viewTransferHistory() {
@@ -77,6 +80,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		
 	}
 
+	//optional
 	private void viewPendingRequests() {
 		// TODO Auto-generated method stub
 		
@@ -87,6 +91,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		
 	}
 
+	//optional
 	private void requestBucks() {
 		// TODO Auto-generated method stub
 		
