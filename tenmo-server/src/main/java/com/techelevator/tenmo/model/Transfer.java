@@ -1,24 +1,25 @@
 package com.techelevator.tenmo.model;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class Transfer {
 
 	private long iD;
 	
-	@NotBlank(message = "The field `transfer type` should not be blank.")
+	@NotNull(message = "The field `transfer type` should not be blank.")
 	private int transferType;
 	
-	@NotBlank(message = "The field `transfer status` should not be blank.")
+	@NotNull(message = "The field `transfer status` should not be blank.")
 	private int transferStatus;
 	
-	@NotBlank(message = "The field `account from` should not be blank.")
+	@NotNull(message = "The field `account from` should not be blank.")
 	private int accountFrom;
 	
-	@NotBlank(message = "The field `account to` should not be blank.")
+	@NotNull(message = "The field `account to` should not be blank.")
 	private int accountTo;
 	
-	@NotBlank(message = "The field `amount` should not be blank.")
+	@NotNull(message = "The field `amount` should not be blank.")
 	private double amount;
 	
 	

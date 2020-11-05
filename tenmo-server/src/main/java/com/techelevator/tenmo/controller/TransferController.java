@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,10 +33,10 @@ public class TransferController {
 	
 	
     @RequestMapping( path = "", method = RequestMethod.GET)
-    public List<Transfer> viewTransferHistory(User user){
-    
+    public List<Transfer> viewTransferHistory(Principal principal){
+    	 
 
-        return dao.viewTransfersHistory(user);
+        return dao.viewTransfersHistory(principal.getName());
     }
 
     

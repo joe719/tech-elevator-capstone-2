@@ -23,16 +23,17 @@ public class TransferSqlDAO implements TransferDAO {
 	
 	
 	@Override
-	public List<Transfer> viewTransfersHistory(User user) {
+	public List<Transfer> viewTransfersHistory(String userName) {
 	
 		List <Transfer> transferHistory = new ArrayList();
 		
 		
-        String sql = "SELECT account_from, account_to, amount " + 
-        		"FROM transfers JOIN accounts on accounts.account_id = transfers.account_from " + 
-        		"WHERE accounts.username = ?";
+        String sql = "SELECT account_from, account_to, amount " +
+        		"FROM transfers JOIN accounts on accounts.account_id = transfers.account_from " +
+        		"JOIN users USING (user_id) " +
+        		"WHERE users.username = ?";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, user.getUsername());
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userName);
         while(results.next()) {
             Transfer transfer = mapRowToTransfer(results);
             transferHistory.add(transfer);

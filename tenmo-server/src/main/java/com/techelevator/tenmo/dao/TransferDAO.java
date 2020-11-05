@@ -7,7 +7,7 @@ import com.techelevator.tenmo.model.User;
 
 public interface TransferDAO {
 
-	List<Transfer> viewTransfersHistory(User user);
+	List<Transfer> viewTransfersHistory(String userName);
 	
 	List<Transfer> listTransfersByType(int transferType);
 	

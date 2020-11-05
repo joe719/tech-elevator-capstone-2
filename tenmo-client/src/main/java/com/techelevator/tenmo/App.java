@@ -2,6 +2,7 @@ package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
+import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
@@ -55,7 +56,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 				viewCurrentBalance();
 			} else if(MAIN_MENU_OPTION_VIEW_PAST_TRANSFERS.equals(choice)) {
 				try {
-					viewTransferHistory();
+					viewTransferHistory(currentUser);
 				} catch (TransferServiceException e) {
 					e.printStackTrace();
 				}
@@ -79,7 +80,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		
 	}
 	
-	private Transfer[] viewTransferHistory() throws TransferServiceException {
+	private Transfer[] viewTransferHistory(AuthenticatedUser currentUser) throws TransferServiceException {
 		TransferService ts = new TransferService();
 		
 		return ts.viewTransferHistory();
@@ -148,6 +149,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			UserCredentials credentials = collectUserCredentials();
 		    try {
 				currentUser = authenticationService.login(credentials);
+				TransferService.AUTH_TOKEN = currentUser.getToken();
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: "+e.getMessage());
 				System.out.println("Please attempt to login again.");
