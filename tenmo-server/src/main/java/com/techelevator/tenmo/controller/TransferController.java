@@ -34,9 +34,9 @@ public class TransferController {
 	
     @RequestMapping( path = "", method = RequestMethod.GET)
     public List<Transfer> viewTransferHistory(Principal principal){
-    	 
+    	System.out.println(principal.getName() + "inside the controller") ;
 
-        return dao.viewTransfersHistory(principal.getName());
+        return dao.viewTransfersHistory(principal);
     }
 
     
