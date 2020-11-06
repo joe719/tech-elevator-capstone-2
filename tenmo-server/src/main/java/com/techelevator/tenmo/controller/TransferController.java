@@ -24,19 +24,19 @@ import com.techelevator.tenmo.model.User;
 @PreAuthorize("isAuthenticated()")
 public class TransferController {
 
-    private JdbcTemplate jdbcTemplate;
+   
 	private TransferDAO dao;
 
-    public TransferController() {
+    public TransferController(JdbcTemplate jdbcTemplate) {
         this.dao = new TransferSqlDAO(jdbcTemplate);
     }	
 	
 	
     @RequestMapping( path = "", method = RequestMethod.GET)
     public List<Transfer> viewTransferHistory(Principal principal){
-    	 
+   
 
-        return dao.viewTransfersHistory(principal.getName());
+        return dao.viewTransfersHistory(principal);
     }
 
     

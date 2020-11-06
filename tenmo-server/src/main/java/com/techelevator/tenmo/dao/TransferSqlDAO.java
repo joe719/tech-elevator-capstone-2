@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.dao;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,17 +24,17 @@ public class TransferSqlDAO implements TransferDAO {
 	
 	
 	@Override
-	public List<Transfer> viewTransfersHistory(String userName) {
+	public List<Transfer> viewTransfersHistory(Principal principal) {
 	
-		List <Transfer> transferHistory = new ArrayList();
+		List <Transfer> transferHistory = new ArrayList<>();
 		
 		
         String sql = "SELECT account_from, account_to, amount " +
         		"FROM transfers JOIN accounts on accounts.account_id = transfers.account_from " +
         		"JOIN users USING (user_id) " +
         		"WHERE users.username = ?";
-
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userName);
+      
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, principal.getName());
         while(results.next()) {
             Transfer transfer = mapRowToTransfer(results);
             transferHistory.add(transfer);
@@ -62,12 +63,10 @@ public class TransferSqlDAO implements TransferDAO {
 	
     private Transfer mapRowToTransfer(SqlRowSet rs) {
         Transfer transfer = new Transfer();
-        transfer.setiD(rs.getLong("transfer_id"));
-        transfer.setTransferType(rs.getInt("transfer_type_id"));
-        transfer.setTransferStatus(rs.getInt("transfer_status_id"));
         transfer.setAccountFrom(rs.getInt("account_from"));
         transfer.setAccountTo(rs.getInt("account_to"));
         transfer.setAmount(rs.getDouble("amount"));
+    
         return transfer;
     }
 	
