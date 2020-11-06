@@ -1,5 +1,7 @@
 package com.techelevator.tenmo.controller;
 
+import java.security.Principal;
+
 import javax.security.auth.login.AccountNotFoundException;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,16 +21,15 @@ import com.techelevator.tenmo.model.Account;
 public class AccountController {
 	
 	private AccountDAO dao;
-	private JdbcTemplate jdbc = new JdbcTemplate();
 	
-	public AccountController() {
+	public AccountController(JdbcTemplate jdbc) {
 		this.dao = new AccountSqlDAO(jdbc);
 	}
 	
-	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
-	public double viewCurrentBalance(@PathVariable long id) throws AccountNotFoundException {
+	@RequestMapping(path = "", method = RequestMethod.GET)
+	public double viewCurrentBalance(Principal principal) throws AccountNotFoundException {
 	
-		return dao.viewCurrentBalance(id);
+		return dao.viewCurrentBalance(principal);
 	}
 	
 	

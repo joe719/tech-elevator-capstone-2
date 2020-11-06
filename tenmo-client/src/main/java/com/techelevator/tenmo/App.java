@@ -6,6 +6,7 @@ import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AccountService;
+import com.techelevator.tenmo.services.AccountServiceException;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.tenmo.services.TransferService;
@@ -55,7 +56,12 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		while(true) {
 			String choice = (String)console.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 			if(MAIN_MENU_OPTION_VIEW_BALANCE.equals(choice)) {
-				viewCurrentBalance();
+				try {
+					viewCurrentBalance();
+				} catch (AccountServiceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else if(MAIN_MENU_OPTION_VIEW_PAST_TRANSFERS.equals(choice)) {
 				try {
 					viewTransferHistory(currentUser);
@@ -77,9 +83,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		}
 	}
 
-	private void viewCurrentBalance() {
-		// TODO Auto-generated method stub
+	private void viewCurrentBalance() throws AccountServiceException {
+		AccountService as = new AccountService();
 		
+		System.out.println(as.viewCurrentBalance());
 		
 	}
 	

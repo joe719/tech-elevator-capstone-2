@@ -11,7 +11,7 @@ import com.techelevator.tenmo.models.Account;
 
 public class AccountService {
 	public static String AUTH_TOKEN = "";
-	private String BASE_URL = "htttp://loalhost:8080/";
+	private String BASE_URL = "http://loalhost:8080/";
 	private RestTemplate restTemplate = new RestTemplate();
 	
 	public AccountService() {
@@ -19,21 +19,22 @@ public class AccountService {
 	}
 	
 	public double viewCurrentBalance() throws AccountServiceException{
-		double balance;
+		Account balanceAccount;
        
         try {
-            balance = restTemplate
-                    .exchange(BASE_URL + "accounts", HttpMethod.GET, makeAuthEntity(), double.class).getBody();
+            balanceAccount = restTemplate
+                    .exchange(BASE_URL + "accounts", HttpMethod.GET, makeAuthEntity(), Account.class).getBody();
         } catch (RestClientResponseException ex) {
             throw new AccountServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
         }
-        return balance;
+        
+        return balanceAccount.getBalance();
 	}
 	
-    private HttpEntity makeAuthEntity() {
+    private HttpEntity<Account> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(AUTH_TOKEN);
-        HttpEntity entity = new HttpEntity<>(headers);
+        HttpEntity<Account> entity = new HttpEntity<>(headers);
         return entity;
     }
 	
