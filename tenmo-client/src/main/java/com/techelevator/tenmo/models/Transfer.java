@@ -49,7 +49,7 @@ public class Transfer {
 	
 	@Override
 	public String toString() {
-	 return accountFrom + ", " + accountTo + ", " + amount;
+	 return "from account: " + accountFrom + " to account: " + accountTo + " amount: " + amount;
 		
 	}
 	
