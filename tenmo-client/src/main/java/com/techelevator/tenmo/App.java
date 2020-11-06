@@ -1,5 +1,11 @@
 package com.techelevator.tenmo;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.RestTemplate;
+
 import com.techelevator.tenmo.models.Account;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
@@ -31,6 +37,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private AuthenticatedUser currentUser;
     private ConsoleService console;
     private AuthenticationService authenticationService;
+    private RestTemplate restTemplate = new RestTemplate();
 
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
@@ -58,7 +65,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 				viewCurrentBalance();
 			} else if(MAIN_MENU_OPTION_VIEW_PAST_TRANSFERS.equals(choice)) {
 				try {
-					viewTransferHistory(currentUser);
+					viewTransferHistory();
 				} catch (TransferServiceException e) {
 					e.printStackTrace();
 				}
@@ -83,12 +90,15 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		
 	}
 	
-	private Transfer[] viewTransferHistory(AuthenticatedUser currentUser) throws TransferServiceException {
+	private void viewTransferHistory() throws TransferServiceException {
 		TransferService ts = new TransferService();
-		
-		return ts.viewTransferHistory();
+		for (Transfer transfer : ts.viewTransferHistory()) {
+			System.out.println (transfer);
+		}
 		
 	}
+	
+	
 
 	//optional
 	private void viewPendingRequests() {
@@ -167,4 +177,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		String password = console.getUserInput("Password");
 		return new UserCredentials(username, password);
 	}
+	
+	
+	
 }

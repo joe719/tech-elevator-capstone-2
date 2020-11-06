@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 import com.techelevator.tenmo.models.Account;
+import com.techelevator.tenmo.models.Transfer;
 
 public class AccountService {
 	public static String AUTH_TOKEN = "";
@@ -30,10 +31,10 @@ public class AccountService {
         return balance;
 	}
 	
-    private HttpEntity makeAuthEntity() {
+    private HttpEntity <Account> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(AUTH_TOKEN);
-        HttpEntity entity = new HttpEntity<>(headers);
+        HttpEntity <Account> entity = new HttpEntity<>(headers);
         return entity;
     }
 	

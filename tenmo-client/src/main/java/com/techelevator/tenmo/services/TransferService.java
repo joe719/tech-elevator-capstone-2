@@ -16,7 +16,7 @@ import com.techelevator.tenmo.models.Transfer;
 public class TransferService {
 	
 
-    public static String AUTH_TOKEN = "";
+    public static String AUTH_TOKEN;
     private final String BASE_URL = "http://localhost:8080";
     public RestTemplate restTemplate = new RestTemplate();
   
@@ -28,6 +28,7 @@ public class TransferService {
         Transfer[] Transfers;
         try {
         	Transfers = restTemplate.exchange(BASE_URL + "/transfers", HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
+        	
         } catch (RestClientResponseException ex) {
             throw new TransferServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
         }
