@@ -32,17 +32,11 @@ public class AccountService {
         return balanceAccount.getBalance();
 	}
 	
-<<<<<<< HEAD
-    private HttpEntity<Account> makeAuthEntity() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(AUTH_TOKEN);
-        HttpEntity<Account> entity = new HttpEntity<>(headers);
-=======
+   
     private HttpEntity <Account> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(AUTH_TOKEN);
         HttpEntity <Account> entity = new HttpEntity<>(headers);
->>>>>>> 3a49eb5ed0c5bcc12c05f2cb0be796c3a61a9015
         return entity;
     }
 	
