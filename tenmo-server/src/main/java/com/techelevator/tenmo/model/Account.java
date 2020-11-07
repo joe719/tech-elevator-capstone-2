@@ -12,6 +12,8 @@ public class Account {
 	@Min(0)
 	private double balance;
 	
+	public Account () {}
+	
 	public Account (long accountId, long userId, double balance) {
 		this.accountId = accountId;
 		this.userId = userId;
