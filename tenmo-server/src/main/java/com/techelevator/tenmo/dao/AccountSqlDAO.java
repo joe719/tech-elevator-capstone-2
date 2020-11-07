@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class AccountSqlDAO implements AccountDAO{
 	private JdbcTemplate jdbcTemplate;
@@ -16,13 +17,18 @@ public class AccountSqlDAO implements AccountDAO{
 	}
 	@Override
 	public double viewCurrentBalance(Principal principal) {
+		
+		double viewBalance = 0;
+		
 		String sqlRowSet = "SELECT balance FROM accounts JOIN users ON accounts.user_id = users.user_id WHERE username = ?";
 		SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sqlRowSet, principal.getName());
-		
-		if(rowSet.next()) {
-		return rowSet.getDouble("balance");
-	}else
-		return -1;
+	
+		if (rowSet.next()) {
+		viewBalance = rowSet.getDouble(1);
+		}
+		return viewBalance;
 	}
+	
+	
 
 }

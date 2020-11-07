@@ -6,6 +6,14 @@ public class Account {
 	private long userId;
 	private double balance;
 	
+	
+	
+	
+	public Account (double balance) {
+		this.balance = balance;
+		
+	}
+	
 	public Account (long accountId, long userId, double balance) {
 		this.accountId = accountId;
 		this.userId = userId;
@@ -29,11 +37,6 @@ public class Account {
 	}
 	public void setBalance(double balance) {
 		this.balance = balance;
-	}
-	
-	@Override
-	public String toString() {
-		return "Your balance is: $" + balance;
 	}
 	
 

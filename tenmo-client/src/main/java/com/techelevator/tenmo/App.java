@@ -1,15 +1,11 @@
 package com.techelevator.tenmo;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestClientResponseException;
+
 import org.springframework.web.client.RestTemplate;
 
-import com.techelevator.tenmo.models.Account;
+
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
-import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AccountServiceException;
@@ -93,7 +89,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void viewCurrentBalance() throws AccountServiceException {
 		AccountService as = new AccountService();
 		
-		System.out.println(as.viewCurrentBalance());
+		System.out.println("Your current balance is " + as.viewCurrentBalance());
 		
 	}
 	
@@ -172,6 +168,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		    try {
 				currentUser = authenticationService.login(credentials);
 				TransferService.AUTH_TOKEN = currentUser.getToken();
+				AccountService.AUTH_TOKEN = currentUser.getToken();
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: "+e.getMessage());
 				System.out.println("Please attempt to login again.");
