@@ -4,13 +4,20 @@ import javax.validation.constraints.NotNull;
 
 public class Transfer {
 
-	private long iD;
+
+	private int transferId;
 	
-	@NotNull(message = "The field `transfer type` should not be blank.")
-	private int transferType;
+	@NotNull(message = "The field `transfer type id` should not be blank.")
+	private int transferTypeId;
 	
-	@NotNull(message = "The field `transfer status` should not be blank.")
-	private int transferStatus;
+
+	private String transferTypeName;
+	
+	@NotNull(message = "The field `transfer status id` should not be blank.")
+	private int transferStatusId;
+	
+
+	private String transferStatusName;
 	
 	@NotNull(message = "The field `account from` should not be blank.")
 	private int accountFrom;
@@ -21,68 +28,117 @@ public class Transfer {
 	@NotNull(message = "The field `amount` should not be blank.")
 	private double amount;
 	
+
+	private String senderUserName;
 	
+
+	private String recipientUserName;
+	
+
+	private int recipientuserId;
+	
+
+	private int senderUserId;
+	
+	
+
 	public Transfer() {};
+  
 	
-	public Transfer(int transferType, int transferStatus, int accountFrom, int accountTo, double amount) {
-		this.transferType = transferType;
-		this.transferStatus = transferStatus;
-		this.accountFrom = accountFrom;
-		this.accountTo = accountTo;
-		this.amount = amount;
-		
+	public int getTransferId() {
+		return transferId;
 	}
-	
-	
-	public Transfer(long iD, int transferType, int transferStatus, int accountFrom, int accountTo, double amount) {
-		this.iD = iD;
-		this.transferType = transferType;
-		this.transferStatus = transferStatus;
-		this.accountFrom = accountFrom;
-		this.accountTo = accountTo;
-		this.amount = amount;
-		
+
+	public void setTransferId(int transferId) {
+		this.transferId = transferId;
 	}
-	
-	
-	
-	public long getiD() {
-		return iD;
+
+	public int getTransferTypeId() {
+		return transferTypeId;
 	}
-	public void setiD(long iD) {
-		this.iD = iD;
+
+	public void setTransferTypeId(int transferTypeId) {
+		this.transferTypeId = transferTypeId;
 	}
-	public int getTransferType() {
-		return transferType;
+
+	public String getTransferTypeName() {
+		return transferTypeName;
 	}
-	public void setTransferType(int transferType) {
-		this.transferType = transferType;
+
+	public void setTransferTypeName(String transferTypeName) {
+		this.transferTypeName = transferTypeName;
 	}
-	public int getTransferStatus() {
-		return transferStatus;
+
+	public int getTransferStatusId() {
+		return transferStatusId;
 	}
-	public void setTransferStatus(int transferStatus) {
-		this.transferStatus = transferStatus;
+
+	public void setTransferStatusId(int transferStatusId) {
+		this.transferStatusId = transferStatusId;
 	}
+
+	public String getTransferStatusName() {
+		return transferStatusName;
+	}
+
+	public void setTransferStatusName(String transferStatusName) {
+		this.transferStatusName = transferStatusName;
+	}
+
 	public int getAccountFrom() {
 		return accountFrom;
 	}
+
 	public void setAccountFrom(int accountFrom) {
 		this.accountFrom = accountFrom;
 	}
+
 	public int getAccountTo() {
 		return accountTo;
 	}
+
 	public void setAccountTo(int accountTo) {
 		this.accountTo = accountTo;
 	}
+
 	public double getAmount() {
 		return amount;
 	}
+
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	
-	
-	
+
+	public String getSenderUserName() {
+		return senderUserName;
+	}
+
+	public void setSenderUserName(String senderUserName) {
+		this.senderUserName = senderUserName;
+	}
+
+	public String getRecipientUserName() {
+		return recipientUserName;
+	}
+
+	public void setRecipientUserName(String recipientUserName) {
+		this.recipientUserName = recipientUserName;
+	}
+
+	public int getRecipientuserId() {
+		return recipientuserId;
+	}
+
+	public void setRecipientuserId(int recipientuserId) {
+		this.recipientuserId = recipientuserId;
+	}
+
+	public int getSenderUserId() {
+		return senderUserId;
+	}
+
+	public void setSenderUserId(int senderUserId) {
+		this.senderUserId = senderUserId;
+	}
 }
+	

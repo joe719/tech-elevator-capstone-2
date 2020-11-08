@@ -20,7 +20,7 @@ public class AccountService {
 		Account balanceAccount;
        
         try {
-            balanceAccount = restTemplate.exchange(BASE_URL + "/accounts", HttpMethod.GET, makeAuthEntity(AUTH_TOKEN), Account.class).getBody();
+            balanceAccount = restTemplate.exchange(BASE_URL + "/accounts", HttpMethod.GET, makeAuthEntity(), Account.class).getBody();
             
         } catch (RestClientResponseException ex) {
             throw new AccountServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
@@ -30,7 +30,7 @@ public class AccountService {
 	}
 	
    
-    private HttpEntity <Account> makeAuthEntity(String AUTH_TOKEN) {
+    private HttpEntity <Account> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(AUTH_TOKEN);
         HttpEntity <Account> entity = new HttpEntity<>(headers);

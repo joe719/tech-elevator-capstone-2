@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.dao.UserSqlDAO;
 import com.techelevator.tenmo.model.User;
@@ -18,17 +17,19 @@ import com.techelevator.tenmo.model.User;
 
 public class UserController {
 	
-	private UserDAO userDAO;
-	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	private UserDAO dao;
+	
 
-    public UserController() {
-        this.userDAO = new UserSqlDAO(jdbcTemplate);
+    public UserController(JdbcTemplate jdbcTemplate) {
+        this.dao = new UserSqlDAO(jdbcTemplate);
     }
 
-    @PreAuthorize("permitAll")
+ 
+    
+    
     @RequestMapping(path = "/users", method = RequestMethod.GET)
     public List<User> findAll() {
-        return userDAO.findAll();
+        return dao.findAll();
     }
     
 }
