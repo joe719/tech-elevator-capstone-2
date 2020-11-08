@@ -2,31 +2,37 @@ package com.techelevator.tenmo.models;
 
 public class Transfer {
 	
-	private int iD;
-	private int transferType;
-	private int transferStatus;
+	private int transferId;
+	private int transferTypeId;
+	private String transferTypeName;
+	private int transferStatusId;
+	private String transferStatusName;
 	private int accountFrom;
 	private int accountTo;
 	private double amount;
+	private String senderUserName;
+	private String recipientUserName;
+	private int recipientuserId;
+	private int senderUserId;
 	
 	
-	public int getiD() {
-		return iD;
+	public int getTransferId() {
+		return transferId;
 	}
-	public void setiD(int iD) {
-		this.iD = iD;
+	public void setTransferId(int transferId) {
+		this.transferId = transferId;
 	}
-	public int getTransferType() {
-		return transferType;
+	public int getTransferTypeId() {
+		return transferTypeId;
 	}
-	public void setTransferType(int transferType) {
-		this.transferType = transferType;
+	public void setTransferTypeId(int transferTypeId) {
+		this.transferTypeId = transferTypeId;
 	}
-	public int getTransferStatus() {
-		return transferStatus;
+	public int getTransferStatusId() {
+		return transferStatusId;
 	}
-	public void setTransferStatus(int transferStatus) {
-		this.transferStatus = transferStatus;
+	public void setTransferStatus(int transferStatusId) {
+		this.transferStatusId = transferStatusId;
 	}
 	public int getAccountFrom() {
 		return accountFrom;
@@ -49,8 +55,45 @@ public class Transfer {
 	
 	@Override
 	public String toString() {
-	 return "from account: " + accountFrom + " to account: " + accountTo + " amount: " + amount;
+	 return "ID: " + transferId + " To: " + recipientUserName + " From: " +
+			 senderUserName + " Amount: " + amount;
 		
+	}
+	public String getSenderUserName() {
+		return senderUserName;
+	}
+	public void setSenderUserName(String senderUserName) {
+		this.senderUserName = senderUserName;
+	}
+	public String getRecipientUserName() {
+		return recipientUserName;
+	}
+	public void setRecipientUserName(String recipientUserName) {
+		this.recipientUserName = recipientUserName;
+	}
+	public int getRecipientuserId() {
+		return recipientuserId;
+	}
+	public void setRecipientuserId(int recipientuserId) {
+		this.recipientuserId = recipientuserId;
+	}
+	public int getSenderUserId() {
+		return senderUserId;
+	}
+	public void setSenderUserId(int senderUserId) {
+		this.senderUserId = senderUserId;
+	}
+	public String getTransferTypeName() {
+		return transferTypeName;
+	}
+	public void setTransferTypeName(String transferTypeName) {
+		this.transferTypeName = transferTypeName;
+	}
+	public String getTransferStatusName() {
+		return transferStatusName;
+	}
+	public void setTransferStatusName(String transferStatusName) {
+		this.transferStatusName = transferStatusName;
 	}
 	
 	

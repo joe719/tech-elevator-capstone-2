@@ -4,14 +4,20 @@ import java.security.Principal;
 import java.util.List;
 
 import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
+
 
 public interface TransferDAO {
 
 	List<Transfer> viewTransfersHistory(Principal principal);
 	
-	List<Transfer> listTransfersByType(int transferType);
+	Transfer viewTransferDetailsByTransferId(Transfer transferDetails);
+
+	void sendUpdatesUserBalance(Transfer transfer);
+
+	void sendBucksCreatesNewTransfer(Transfer requestBucksNT); 
 	
-	List<Transfer> listTransferByStatus(int transferStatus);
+	public void requestBucks (Transfer requestBucks);
+
+
 	
 }

@@ -6,6 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
+import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AccountServiceException;
@@ -13,6 +14,8 @@ import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.tenmo.services.TransferService;
 import com.techelevator.tenmo.services.TransferServiceException;
+import com.techelevator.tenmo.services.UserService;
+import com.techelevator.tenmo.services.UserServiceException;
 import com.techelevator.view.ConsoleService;
 
 public class App {
@@ -55,14 +58,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		mainMenu();
 	}
 
-	private void mainMenu() {
+	private void mainMenu(){
 		while(true) {
 			String choice = (String)console.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 			if(MAIN_MENU_OPTION_VIEW_BALANCE.equals(choice)) {
 				try {
 					viewCurrentBalance();
 				} catch (AccountServiceException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else if(MAIN_MENU_OPTION_VIEW_PAST_TRANSFERS.equals(choice)) {
@@ -74,9 +76,27 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			} else if(MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS.equals(choice)) {
 				viewPendingRequests();
 			} else if(MAIN_MENU_OPTION_SEND_BUCKS.equals(choice)) {
-				sendBucks();
+				try {
+					try {
+						sendBucks();
+					} catch (UserServiceException e) {
+	
+						e.printStackTrace();
+					}
+				} catch (TransferServiceException e) {
+					e.printStackTrace();
+				}
 			} else if(MAIN_MENU_OPTION_REQUEST_BUCKS.equals(choice)) {
-				requestBucks();
+				try {
+					try {
+						requestBucks();
+					} catch (UserServiceException e) {
+	
+						e.printStackTrace();
+					}
+				} catch (TransferServiceException e) {
+					e.printStackTrace();
+				}
 			} else if(MAIN_MENU_OPTION_LOGIN.equals(choice)) {
 				login();
 			} else {
@@ -89,36 +109,155 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void viewCurrentBalance() throws AccountServiceException {
 		AccountService as = new AccountService();
 		
+		System.out.println("--------------------------------------");
 		System.out.println("Your current balance is " + as.viewCurrentBalance());
+		System.out.println("--------------------------------------");
+		System.out.println("Please visit http://localhost/8080/catcards/random");
+		System.out.println("--------------------------------------");
 		
 	}
 	
 	private void viewTransferHistory() throws TransferServiceException {
 		TransferService ts = new TransferService();
+		
+		System.out.println("--------------------------------------");
+		System.out.println("Your Transfer History:");
+		System.out.println("--------------------------------------");
+		
 		for (Transfer transfer : ts.viewTransferHistory()) {
 			System.out.println (transfer);
 		}
 		
+		System.out.println("--------------------------------------");
+		System.out.println("--------------------------------------");
+		
+		String prompt = "Please enter transfer ID to view details (0 to cancel)";
+		int transferDetailId = console.getUserInputInteger(prompt);
+		System.out.println("---------------------------------");
+		System.out.println("Transfer Details");
+		System.out.println("---------------------------------");
+		
+		Transfer transferDetails = new Transfer();
+		transferDetails.setTransferId(transferDetailId);
+		
+		System.out.println(ts.viewTransferDetailsByTransferId(transferDetails));
+		
+		
+		System.out.println("--------------------------------------");
+		System.out.println("Please visit http://localhost/8080/catcards/random");
+		System.out.println("--------------------------------------");		
+		
+		
 	}
 	
 	
 
-	//optional
+	
 	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
+
+		System.out.println("--------------------------------------");
+		System.out.println("Give Us A Break!");
+		System.out.println("--------------------------------------");	
+		System.out.println("--------------------------------------");
+		System.out.println("Please visit http://localhost/8080/catcards/random");
+		System.out.println("--------------------------------------");	
+		
 		
 	}
 
-	private void sendBucks() {
-		// TODO Auto-generated method stub
+	private void sendBucks() throws TransferServiceException, UserServiceException {
+		TransferService ts = new TransferService();
+		UserService us = new UserService();
+		
+		System.out.println("--------------------------------------");
+		System.out.println("Who Deserves Your Money??? ");
+		System.out.println("--------------------------------------");
+		
+			
+		for (User user : us.listAllUsers()) {
+			System.out.print ("Username: " + user.getUsername() + " ID: ");
+			System.out.print (user.getId());
+			System.out.println("");
+		}
+		
+		System.out.println("--------------------------------------");
+		String promptId = "Type The ID# Of The Person You're Sending Money To, or Press 0 To Cancel: ";
+		int account = console.getUserInputInteger(promptId);
+		System.out.println("--------------------------------------");
+		
+		
+		
+		System.out.println("--------------------------------------");
+		String promptAmount = "How much money do you want to send? Enter in the following format: 10.00";
+		double formattedAmount = Double.parseDouble(console.getUserInput(promptAmount));
+		System.out.println("--------------------------------------");
+		
+		Transfer sendBucks = new Transfer();
+		sendBucks.setTransferTypeId(2);
+		sendBucks.setTransferStatus(2);
+		sendBucks.setAmount(formattedAmount);
+		sendBucks.setAccountTo(account);
+		sendBucks.setAccountFrom(currentUser.getUser().getId());
+		
+		ts.sendBucksCreatesNewTransfer(sendBucks, currentUser);
+		
+		ts.sendUpdatesUserBalance(sendBucks, currentUser);
+		
+		System.out.println("--------------------------------------");
+		System.out.println("Thanks Have A Great Day!");	
+		System.out.println("--------------------------------------");
+		System.out.println("Please visit http://localhost/8080/catcards/random");
+		System.out.println("--------------------------------------");
 		
 	}
 
-	//optional
-	private void requestBucks() {
-		// TODO Auto-generated method stub
+	
+	private void requestBucks() throws TransferServiceException, UserServiceException {
+		TransferService ts = new TransferService();	
+		UserService us = new UserService();
 		
+		System.out.println("--------------------------------------");
+		System.out.println("Select The Person Who Owes You Money: ");
+		System.out.println("--------------------------------------");
+		
+			
+		for (User user : us.listAllUsers()) {
+			System.out.print ("Username: " + user.getUsername() + " ID: ");
+			System.out.print (user.getId());
+			System.out.println("");
+			
+			}
+			
+		System.out.println("--------------------------------------");
+		String promptId = "Type The ID# Of The Person Who Owes You Money, or Press 0 to cancel: ";
+		int account = console.getUserInputInteger(promptId);
+		System.out.println("--------------------------------------");
+		
+		
+		
+		System.out.println("--------------------------------------");
+		String promptAmount = "How much money do they owe you? Enter in the following format: 10.00";
+		double formattedAmount = Double.parseDouble(console.getUserInput(promptAmount));
+		System.out.println("--------------------------------------");
+		
+		Transfer requestBucks = new Transfer();
+		requestBucks.setTransferTypeId(1);
+		requestBucks.setTransferStatus(1);
+		requestBucks.setAmount(formattedAmount);
+		requestBucks.setAccountTo(account);
+		requestBucks.setAccountFrom(currentUser.getUser().getId());
+		
+		ts.requestBucks(requestBucks, currentUser);
+		
+		System.out.println("--------------------------------------");
+		System.out.println("Your Request Is Pending Approval");	
+		System.out.println("--------------------------------------");
+		System.out.println("Thanks Have A Great Day!");	
+		System.out.println("--------------------------------------");
+		System.out.println("Please visit http://localhost/8080/catcards/random");
+		System.out.println("--------------------------------------");
 	}
+	
 	
 	private void exitProgram() {
 		System.exit(0);
@@ -169,6 +308,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 				currentUser = authenticationService.login(credentials);
 				TransferService.AUTH_TOKEN = currentUser.getToken();
 				AccountService.AUTH_TOKEN = currentUser.getToken();
+				UserService.AUTH_TOKEN = currentUser.getToken();
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: "+e.getMessage());
 				System.out.println("Please attempt to login again.");
