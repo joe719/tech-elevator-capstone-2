@@ -16,6 +16,22 @@ public class Transfer {
 	private int senderUserId;
 	
 	
+	@Override
+	public String toString() {
+	 return "ID: " + transferId + " To: " + recipientUserName + " From: " +
+			 senderUserName + " Amount: " + amount;	
+	}
+	
+	public String printTransferDetails(Transfer testTransfer) {
+   	 return ("\n Id: " + transferId +
+   			"\n From: " + senderUserName +
+   			"\n To: " + recipientUserName +
+			"\n Type: " + transferTypeName +
+        	"\n Status: " + transferStatusName +
+			"\n Amount: $" + amount);
+   }
+	
+	
 	public int getTransferId() {
 		return transferId;
 	}
@@ -53,12 +69,6 @@ public class Transfer {
 		this.amount = amount;
 	}
 	
-	@Override
-	public String toString() {
-	 return "ID: " + transferId + " To: " + recipientUserName + " From: " +
-			 senderUserName + " Amount: " + amount;
-		
-	}
 	public String getSenderUserName() {
 		return senderUserName;
 	}

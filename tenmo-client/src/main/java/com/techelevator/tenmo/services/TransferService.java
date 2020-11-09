@@ -1,6 +1,5 @@
 package com.techelevator.tenmo.services;
 
-import java.util.List;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +22,18 @@ public class TransferService {
     public RestTemplate restTemplate = new RestTemplate();
   
 
+	
+    public void sendBucksCreatesNewTransfer(Transfer requestBucksNT, AuthenticatedUser currentUser) throws TransferServiceException{
+      	 
+    	try {
+            restTemplate.exchange(BASE_URL + "/transfers/createtransfer", HttpMethod.POST, makeTransferEntityRequestBucks(requestBucksNT), Transfer.class, requestBucksNT).getBody();
+        } catch (RestClientResponseException ex) {
+            throw new TransferServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
+        }
+    	
+    } 
 
+    
     public Transfer[] viewTransferHistory() throws TransferServiceException{
         Transfer[] Transfers;
         try {
@@ -37,46 +47,20 @@ public class TransferService {
 	
     
     
-    public Transfer viewTransferDetailsByTransferId(Transfer transferDetails) throws TransferServiceException {
-    int id = transferDetails.getTransferId();
-   
-    try {
-    	transferDetails = restTemplate.exchange(BASE_URL + "/transfers/" + id ,HttpMethod.GET, makeTransferEntity(transferDetails), Transfer.class).getBody();
-    	
-    } catch (RestClientResponseException ex) {
-        throw new TransferServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
-    }
-    return transferDetails;
+    public Transfer viewTransferDetailsByTransferId(int id) throws TransferServiceException {
+    	 Transfer myTransfer;
+    	   
+    	  try {
+    	    	myTransfer = restTemplate.exchange(BASE_URL + "/transfers/" + id ,HttpMethod.GET, makeTransferEntity(), Transfer.class).getBody();
+    	    	
+    	  } catch (RestClientResponseException ex) {
+    	        throw new TransferServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
+    	  }
+    	  return myTransfer;
+    	    
+    	  }
     
-    }
-    
-    
-    
-    
-	
-    public void sendBucksCreatesNewTransfer(Transfer requestBucksNT, AuthenticatedUser currentUser) throws TransferServiceException{
-      	 
-    	try {
-            restTemplate.exchange(BASE_URL + "/transfers/createtransfer", HttpMethod.POST, makeTransferEntityRequestBucks(requestBucksNT), Transfer.class, requestBucksNT).getBody();
-        } catch (RestClientResponseException ex) {
-            throw new TransferServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
-        }
-    	
-    } 
-    
-    
-    public void sendUpdatesUserBalance(Transfer sendBucksUpdates, AuthenticatedUser currentUser) throws TransferServiceException{
-    	
-    	try {
-    		restTemplate.exchange(BASE_URL + "/transfers/updates", HttpMethod.PUT, makeTransferEntityRequestBucks(sendBucksUpdates), Transfer.class, sendBucksUpdates).getBody();
-        	
-        } catch (RestClientResponseException ex) {
-            throw new TransferServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
-        }
-    	
-    }
-    
-    
+
     public void requestBucks(Transfer requestBucks, AuthenticatedUser currentUser) throws TransferServiceException{
     	 
     	try {
@@ -89,17 +73,7 @@ public class TransferService {
     
     
    
-    
-    
-    
-    
-//    private HttpEntity<Transfer> makeTransferEntityTransferDetails(Transfer details) {
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        headers.setBearerAuth(AUTH_TOKEN);
-//        HttpEntity<Transfer> entity = new HttpEntity<>(requestBucks, headers);
-//        return entity;
-//    }
+
     
     
     
@@ -113,19 +87,14 @@ public class TransferService {
     }
 
     
-   
-    
-    
-    private HttpEntity<Transfer> makeTransferEntity(Transfer Transfer) {
+    private HttpEntity<Transfer> makeTransferEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(AUTH_TOKEN);
-        HttpEntity<Transfer> entity = new HttpEntity<>(Transfer, headers);
+        HttpEntity<Transfer> entity = new HttpEntity<>(headers);
         return entity;
     }
-
-
-
+    
      
     private HttpEntity<Transfer> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();

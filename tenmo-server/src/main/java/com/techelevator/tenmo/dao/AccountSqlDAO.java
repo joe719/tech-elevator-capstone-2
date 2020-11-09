@@ -6,6 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import com.techelevator.tenmo.model.Account;
+
+
 
 @Component
 public class AccountSqlDAO implements AccountDAO{
@@ -27,6 +30,22 @@ public class AccountSqlDAO implements AccountDAO{
 		viewBalance = rowSet.getDouble(1);
 		}
 		return viewBalance;
+	}
+	
+	
+	
+	@Override
+	public void sendUpdatesUserBalance (Account sendBucksUpdates) {
+	 
+		String sql = "UPDATE accounts SET balance = balance - ? " +
+					 "FROM users WHERE accounts.user_id = users.user_id AND users.user_id = ?";
+		jdbcTemplate.update(sql, sendBucksUpdates.getBalance(), sendBucksUpdates.getSenderUserId());
+		
+		String sql2 = "UPDATE accounts SET balance = balance + ? " +
+				 	"FROM users WHERE accounts.user_id = users.user_id AND users.user_id = ?";
+		jdbcTemplate.update(sql2, sendBucksUpdates.getBalance(), sendBucksUpdates.getRecipientUserId());
+		
+	
 	}
 	
 	

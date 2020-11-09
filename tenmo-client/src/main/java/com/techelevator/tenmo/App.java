@@ -1,9 +1,7 @@
 package com.techelevator.tenmo;
 
 
-import org.springframework.web.client.RestTemplate;
-
-
+import com.techelevator.tenmo.models.Account;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.User;
@@ -37,7 +35,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private AuthenticatedUser currentUser;
     private ConsoleService console;
     private AuthenticationService authenticationService;
-    private RestTemplate restTemplate = new RestTemplate();
 
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
@@ -100,7 +97,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			} else if(MAIN_MENU_OPTION_LOGIN.equals(choice)) {
 				login();
 			} else {
-				// the only other option on the main menu is to exit
 				exitProgram();
 			}
 		}
@@ -112,65 +108,21 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("--------------------------------------");
 		System.out.println("Your current balance is " + as.viewCurrentBalance());
 		System.out.println("--------------------------------------");
+		System.out.println("ThANks HaVE A GReaT DAy!");				
+		System.out.println("--------------------------------------");
 		System.out.println("Please visit http://localhost/8080/catcards/random");
 		System.out.println("--------------------------------------");
 		
 	}
 	
-	private void viewTransferHistory() throws TransferServiceException {
-		TransferService ts = new TransferService();
-		
-		System.out.println("--------------------------------------");
-		System.out.println("Your Transfer History:");
-		System.out.println("--------------------------------------");
-		
-		for (Transfer transfer : ts.viewTransferHistory()) {
-			System.out.println (transfer);
-		}
-		
-		System.out.println("--------------------------------------");
-		System.out.println("--------------------------------------");
-		
-		String prompt = "Please enter transfer ID to view details (0 to cancel)";
-		int transferDetailId = console.getUserInputInteger(prompt);
-		System.out.println("---------------------------------");
-		System.out.println("Transfer Details");
-		System.out.println("---------------------------------");
-		
-		Transfer transferDetails = new Transfer();
-		transferDetails.setTransferId(transferDetailId);
-		
-		System.out.println(ts.viewTransferDetailsByTransferId(transferDetails));
-		
-		
-		System.out.println("--------------------------------------");
-		System.out.println("Please visit http://localhost/8080/catcards/random");
-		System.out.println("--------------------------------------");		
-		
-		
-	}
 	
-	
-
-	
-	private void viewPendingRequests() {
-
-		System.out.println("--------------------------------------");
-		System.out.println("Give Us A Break!");
-		System.out.println("--------------------------------------");	
-		System.out.println("--------------------------------------");
-		System.out.println("Please visit http://localhost/8080/catcards/random");
-		System.out.println("--------------------------------------");	
-		
-		
-	}
-
 	private void sendBucks() throws TransferServiceException, UserServiceException {
 		TransferService ts = new TransferService();
 		UserService us = new UserService();
+		AccountService as = new AccountService();
 		
 		System.out.println("--------------------------------------");
-		System.out.println("Who Deserves Your Money??? ");
+		System.out.println("Select the roommate with all the bills in their name from the list below:");
 		System.out.println("--------------------------------------");
 		
 			
@@ -201,23 +153,59 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		
 		ts.sendBucksCreatesNewTransfer(sendBucks, currentUser);
 		
-		ts.sendUpdatesUserBalance(sendBucks, currentUser);
+		Account updatedAccount = new Account(formattedAmount);
+		updatedAccount.setSenderUserId(currentUser.getUser().getId());
+		updatedAccount.setRecipientUserId(account);
 		
+		as.sendUpdatesUserBalance(updatedAccount, currentUser);
+
 		System.out.println("--------------------------------------");
-		System.out.println("Thanks Have A Great Day!");	
+		System.out.println("Thank you so much for your donation in the amount of $" + formattedAmount);
 		System.out.println("--------------------------------------");
 		System.out.println("Please visit http://localhost/8080/catcards/random");
 		System.out.println("--------------------------------------");
 		
 	}
-
+	
+	
+	private void viewTransferHistory() throws TransferServiceException {
+		TransferService ts = new TransferService();
+		
+		System.out.println("--------------------------------------");
+		System.out.println("Your Transfer History:");
+		System.out.println("--------------------------------------");
+		
+		for (Transfer transfer : ts.viewTransferHistory()) {
+			System.out.println (transfer);
+		}
+		
+		System.out.println("--------------------------------------");
+		String prompt = "Please enter transfer ID to view details or press 0 to cancel:";
+		int transferDetailId = console.getUserInputInteger(prompt);
+		System.out.println("---------------------------------");
+		System.out.println("Transfer Details: ");
+		System.out.println("---------------------------------");
+		
+		Transfer transferDetails = new Transfer();
+		transferDetails.setTransferId(transferDetailId);
+		System.out.println(ts.viewTransferDetailsByTransferId(transferDetails.getTransferId()).printTransferDetails(transferDetails));
+		
+		System.out.println("--------------------------------------");
+		System.out.println("ThANks HaVE A GReaT DAy!");		
+		System.out.println("--------------------------------------");
+		System.out.println("Please visit http://localhost/8080/catcards/random");
+		System.out.println("--------------------------------------");		
+		
+		
+	}
 	
 	private void requestBucks() throws TransferServiceException, UserServiceException {
 		TransferService ts = new TransferService();	
 		UserService us = new UserService();
 		
 		System.out.println("--------------------------------------");
-		System.out.println("Select The Person Who Owes You Money: ");
+		System.out.println("I guess you're the roommate with all the bills in your name.");		
+		System.out.println("Who owes you money?");
 		System.out.println("--------------------------------------");
 		
 			
@@ -229,7 +217,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			}
 			
 		System.out.println("--------------------------------------");
-		String promptId = "Type The ID# Of The Person Who Owes You Money, or Press 0 to cancel: ";
+		String promptId = "Type the ID# of the person who owes you money, or press 0 to cancel: ";
 		int account = console.getUserInputInteger(promptId);
 		System.out.println("--------------------------------------");
 		
@@ -250,14 +238,28 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		ts.requestBucks(requestBucks, currentUser);
 		
 		System.out.println("--------------------------------------");
-		System.out.println("Your Request Is Pending Approval");	
+		System.out.println("Your request is pending approval.");	
 		System.out.println("--------------------------------------");
-		System.out.println("Thanks Have A Great Day!");	
+		System.out.println("At TEnmo®, we don't rest until your money is our money™");	
+		System.out.println("--------------------------------------");
+		System.out.println("ThANks HaVE A GReaT DAy!");	
 		System.out.println("--------------------------------------");
 		System.out.println("Please visit http://localhost/8080/catcards/random");
 		System.out.println("--------------------------------------");
 	}
 	
+	private void viewPendingRequests() {
+
+		System.out.println("--------------------------------------");
+		System.out.println("Give Us A Break!");
+		System.out.println("--------------------------------------");
+		System.out.println("ThANks HaVE A GReaT DAy!");	
+		System.out.println("--------------------------------------");
+		System.out.println("Please visit http://localhost/8080/catcards/random");
+		System.out.println("--------------------------------------");	
+		
+		
+	}
 	
 	private void exitProgram() {
 		System.exit(0);

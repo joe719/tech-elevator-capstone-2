@@ -10,9 +10,7 @@ public interface TransferDAO {
 
 	List<Transfer> viewTransfersHistory(Principal principal);
 	
-	Transfer viewTransferDetailsByTransferId(Transfer transferDetails);
-
-	void sendUpdatesUserBalance(Transfer transfer);
+	Transfer viewTransferDetailsByTransferId(int transferDetailId);
 
 	void sendBucksCreatesNewTransfer(Transfer requestBucksNT); 
 	

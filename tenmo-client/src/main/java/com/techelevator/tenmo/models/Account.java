@@ -5,10 +5,12 @@ public class Account {
 	private long accountId;
 	private long userId;
 	private double balance;
+	private int senderUserId;
+	private int recipientUserId;
 	
 	
-	
-	
+
+
 	public Account (double balance) {
 		this.balance = balance;
 		
@@ -18,6 +20,24 @@ public class Account {
 		this.accountId = accountId;
 		this.userId = userId;
 		this.balance = balance;	
+	}
+	
+	
+	
+	public int getSenderUserId() {
+		return senderUserId;
+	}
+
+	public void setSenderUserId(int senderUserId) {
+		this.senderUserId = senderUserId;
+	}
+
+	public int getRecipientUserId() {
+		return recipientUserId;
+	}
+
+	public void setRecipientUserId(int recipientUserId) {
+		this.recipientUserId = recipientUserId;
 	}
 		
 	public long getAccountId() {

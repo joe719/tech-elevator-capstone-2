@@ -11,13 +11,35 @@ public class Account {
 	private long userId;
 	@Min(0)
 	private double balance;
+	private int senderUserId;
+	private int recipientUserId;
 	
+
+
 	public Account () {}
 	
 	public Account (long accountId, long userId, double balance) {
 		this.accountId = accountId;
 		this.userId = userId;
 		this.balance = balance;
+	}
+	
+	
+	
+	public int getSenderUserId() {
+		return senderUserId;
+	}
+
+	public void setSenderUserId(int senderUserId) {
+		this.senderUserId = senderUserId;
+	}
+
+	public int getRecipientUserId() {
+		return recipientUserId;
+	}
+
+	public void setRecipientUserId(int recipientUserId) {
+		this.recipientUserId = recipientUserId;
 	}
 	
 	public long getAccountId() {
