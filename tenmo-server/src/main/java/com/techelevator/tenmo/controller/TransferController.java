@@ -62,4 +62,9 @@ public class TransferController {
     	dao.requestBucks(requestBucks);
     }
     
+    @RequestMapping( path = "/pendingrequests", method = RequestMethod.GET)
+    public List<Transfer> viewPendingRequests(Principal principal){
+        return dao.viewPendingTransfers(principal);
+    } 
+    
 }

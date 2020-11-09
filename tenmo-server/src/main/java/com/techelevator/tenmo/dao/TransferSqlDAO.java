@@ -114,8 +114,28 @@ public class TransferSqlDAO implements TransferDAO {
 	
 	}
 
+	@Override
+	public List<Transfer> viewPendingTransfers(Principal principal) {
 	
-
+		List <Transfer> pendingTransfers = new ArrayList<>();	
+		
+		String sql = "SELECT transfer_id, username, amount "+
+				"FROM transfers "+
+				"JOIN transfer_types USING (transfer_type_id) "+
+				"JOIN transfer_statuses USING (transfer_status_id) "+
+				"JOIN accounts ON transfers.account_from = accounts.account_id "+
+				"JOIN users ON accounts.user_id = users.user_id "+
+				"WHERE transfer_type_desc = 'Request' AND transfer_status_desc = 'Pending' AND account_to = " + 
+				"(SELECT account_to FROM accounts JOIN users USING (user_id) WHERE username = ?)";
+		
+		SqlRowSet bananas = jdbcTemplate.queryForRowSet(sql, principal.getName());
+        while(bananas.next()) {
+            Transfer transfer = mapRowForViewPendingRequests(bananas);
+            pendingTransfers.add(transfer);
+        }
+		
+		return pendingTransfers;
+	}
 	
 	
 	
@@ -142,5 +162,13 @@ public class TransferSqlDAO implements TransferDAO {
         return transfer;
     }
 
+    private Transfer mapRowForViewPendingRequests(SqlRowSet rs) {
+        Transfer transfer = new Transfer();
+        transfer.setTransferId(rs.getInt("transfer_id"));
+        transfer.setRecipientUserName(rs.getString("username"));
+        transfer.setAmount(rs.getDouble("amount"));
+   
+        return transfer;
+    }
 
 }
