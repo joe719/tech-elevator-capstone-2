@@ -6,38 +6,21 @@ public class Transfer {
 
 
 	private int transferId;
-	
 	@NotNull(message = "The field `transfer type id` should not be blank.")
 	private int transferTypeId;
-	
-
 	private String transferTypeName;
-	
 	@NotNull(message = "The field `transfer status id` should not be blank.")
 	private int transferStatusId;
-	
-
 	private String transferStatusName;
-	
 	@NotNull(message = "The field `account from` should not be blank.")
 	private int accountFrom;
-	
 	@NotNull(message = "The field `account to` should not be blank.")
 	private int accountTo;
-	
 	@NotNull(message = "The field `amount` should not be blank.")
 	private double amount;
-	
-
 	private String senderUserName;
-	
-
 	private String recipientUserName;
-	
-
 	private int recipientuserId;
-	
-
 	private int senderUserId;
 	
 	

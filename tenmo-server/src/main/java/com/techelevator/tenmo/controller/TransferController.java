@@ -33,34 +33,25 @@ public class TransferController {
         this.dao = new TransferSqlDAO(jdbcTemplate);
     }	
 	
-	
-    @RequestMapping( path = "", method = RequestMethod.GET)
-    public List<Transfer> viewTransferHistory(Principal principal){
-   
-
-        return dao.viewTransfersHistory(principal);
-    }
-
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public Transfer viewTransferDetailsByTransferId(Transfer transferDetails) {
-    	return dao.viewTransferDetailsByTransferId(transferDetails);
-    }
     
     
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @RequestMapping( path = "/updates", method = RequestMethod.PUT)
     
-    public void sendUpdatesUserBalance(Transfer  sendBucksUpdates) {
-    
-    	dao.sendUpdatesUserBalance(sendBucksUpdates);
-    }
-    
-    
-    //adds a transfer when send method
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "/createtransfer", method = RequestMethod.POST)
     public void sendBucksCreatesNewTransfer(@RequestBody Transfer requestBucksNT) {
     	dao.sendBucksCreatesNewTransfer(requestBucksNT);
+    }
+    
+	
+    @RequestMapping( path = "", method = RequestMethod.GET)
+    public List<Transfer> viewTransferHistory(Principal principal){
+        return dao.viewTransfersHistory(principal);
+    }
+    
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public Transfer viewTransferDetailsByTransferId(@PathVariable int id) {
+    	return dao.viewTransferDetailsByTransferId(id);
     }
     
     
@@ -68,7 +59,6 @@ public class TransferController {
     @RequestMapping( path = "/request", method = RequestMethod.POST)
     
     public void requestBucks(@RequestBody Transfer requestBucks) {
-    
     	dao.requestBucks(requestBucks);
     }
     

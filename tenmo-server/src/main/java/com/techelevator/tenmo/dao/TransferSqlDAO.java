@@ -22,6 +22,19 @@ public class TransferSqlDAO implements TransferDAO {
 	        this.jdbcTemplate = jdbcTemplate;
 	    }
 	
+	  
+	  
+	  
+	  
+	@Override
+	public void sendBucksCreatesNewTransfer(Transfer requestBucksNT) {
+			String sql = "INSERT INTO transfers (transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount) " + 
+					"VALUES (DEFAULT, ?, ?, ?, ?, ?)";
+			jdbcTemplate.update(sql, requestBucksNT.getTransferTypeId(), requestBucksNT.getTransferStatusId(), requestBucksNT.getAccountFrom(), requestBucksNT.getAccountTo(), requestBucksNT.getAmount());
+			
+			
+		} 
+	  
 	
 	@Override
 	public List<Transfer> viewTransfersHistory(Principal principal) {
@@ -60,101 +73,35 @@ public class TransferSqlDAO implements TransferDAO {
 	
 	@Override
 
-	public Transfer viewTransferDetailsByTransferId(Transfer transferDetails) {
+	public Transfer viewTransferDetailsByTransferId(int transferDetailId) {
+		
+		Transfer details = new Transfer();
 
 		String sql = "SELECT transfers.transfer_id, (SELECT username AS sender\n" + 
-
-				"                                FROM users JOIN accounts USING (user_id)\n" + 
-
-				"                                WHERE account_id = (SELECT account_from FROM transfers\n" + 
-
-				"                                FULL OUTER JOIN accounts ON transfers.account_to = accounts.account_id\n" + 
-
-				"                                FULL OUTER JOIN users ON users.user_id = accounts.user_id WHERE transfer_id = ?)),\n" + 
-
+				"FROM users JOIN accounts USING (user_id)\n" + 
+				"WHERE account_id = (SELECT account_from FROM transfers\n" + 
+				"FULL OUTER JOIN accounts ON transfers.account_to = accounts.account_id\n" + 
+				"FULL OUTER JOIN users ON users.user_id = accounts.user_id WHERE transfer_id = ?)),\n" + 
 				"\n" + 
-
-				"                               (SELECT username AS recipient\n" + 
-
-				"                               FROM users JOIN accounts USING (user_id)\n" + 
-
-				"                               WHERE account_id = (SELECT account_to FROM transfers\n" + 
-
-				"                               FULL OUTER JOIN accounts ON transfers.account_from = accounts.account_id\n" + 
-
-				"                               FULL OUTER JOIN users ON users.user_id = accounts.user_id WHERE transfer_id = ?)), transfer_types.transfer_type_desc , transfer_statuses.transfer_status_desc, transfers.amount\n" + 
-
+				"(SELECT username AS recipient\n" + 
+				"FROM users JOIN accounts USING (user_id)\n" + 
+				"WHERE account_id = (SELECT account_to FROM transfers\n" + 
+				"FULL OUTER JOIN accounts ON transfers.account_from = accounts.account_id\n" + 
+				"FULL OUTER JOIN users ON users.user_id = accounts.user_id WHERE transfer_id = ?)), transfer_types.transfer_type_desc , transfer_statuses.transfer_status_desc, transfers.amount\n" + 
 				"FROM transfers \n" + 
-
 				"JOIN accounts ON accounts.account_id = transfers.account_from\n" + 
-
 				"JOIN users ON accounts.user_id = users.user_id\n" + 
-
 				"JOIN transfer_types ON transfers.transfer_type_id = transfer_types.transfer_type_id\n" + 
-
 				"JOIN transfer_statuses ON transfers.transfer_status_id = transfer_statuses.transfer_status_id\n" + 
-
 				"WHERE transfers.transfer_id = ?";
 
-		
-
-		SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, transferDetails.getTransferId(), transferDetails.getTransferId(), transferDetails.getTransferId());
-
-		
+		SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, transferDetailId, transferDetailId, transferDetailId);
 
 		if(rowSet.next()) {
-
-			transferDetails = mapRowToTransferDetails(rowSet);
-
-			
-
+			details = mapRowToTransferDetails(rowSet);
 		}else
-
 			return null;
-
-		
-
-		return transferDetails;
-
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-		
-	
-	
-	
-	@Override
-	public void sendBucksCreatesNewTransfer(Transfer requestBucksNT) {
-		String sql = "INSERT INTO transfers (transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount) " + 
-				"VALUES (DEFAULT, ?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, requestBucksNT.getTransferTypeId(), requestBucksNT.getTransferStatusId(), requestBucksNT.getAccountFrom(), requestBucksNT.getAccountTo(), requestBucksNT.getAmount());
-		
-		
-	}
-
-	
-	@Override
-	public void sendUpdatesUserBalance (Transfer sendBucksUpdates) {
-	 
-		String sql = "UPDATE accounts SET balance = balance - ? " +
-					 "FROM users WHERE accounts.user_id = users.user_id AND users.username = ?";
-		jdbcTemplate.update(sql, sendBucksUpdates.getAmount(), sendBucksUpdates.getSenderUserName());
-		
-		String sql2 = "UPDATE accounts SET balance = balance + ? " +
-				 	"FROM users WHERE accounts.user_id = users.user_id AND users.user_id = ?";
-		jdbcTemplate.update(sql2, sendBucksUpdates.getAmount(), sendBucksUpdates.getRecipientuserId());
-		
-	
+		return details;
 	}
 	
 	
@@ -169,6 +116,9 @@ public class TransferSqlDAO implements TransferDAO {
 
 	
 
+	
+	
+	
 	
     private Transfer mapRowForViewTransferHistory(SqlRowSet rs) {
         Transfer transfer = new Transfer();
@@ -191,5 +141,6 @@ public class TransferSqlDAO implements TransferDAO {
     
         return transfer;
     }
+
 
 }
