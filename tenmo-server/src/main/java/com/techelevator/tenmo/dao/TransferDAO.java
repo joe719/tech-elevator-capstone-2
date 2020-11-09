@@ -15,6 +15,8 @@ public interface TransferDAO {
 	void sendBucksCreatesNewTransfer(Transfer requestBucksNT); 
 	
 	public void requestBucks (Transfer requestBucks);
+	
+	public List<Transfer> viewPendingTransfers(Principal principal);
 
 
 	

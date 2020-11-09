@@ -71,7 +71,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 					e.printStackTrace();
 				}
 			} else if(MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS.equals(choice)) {
-				viewPendingRequests();
+				try {
+					viewPendingRequests();
+				} catch (TransferServiceException e) {
+					e.printStackTrace();
+				}
 			} else if(MAIN_MENU_OPTION_SEND_BUCKS.equals(choice)) {
 				try {
 					try {
@@ -248,12 +252,64 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("--------------------------------------");
 	}
 	
-	private void viewPendingRequests() {
+	private void viewPendingRequests() throws TransferServiceException {
+		
+		AccountService as = new AccountService();
+		TransferService ts = new TransferService();
+		
+		System.out.println("--------------------------------------");
+		System.out.println("People want money from you:");	
+		System.out.println("--------------------------------------");
+
+		for (Transfer transfer : ts.viewPendingRequests()) {
+			System.out.println (transfer);
+		}
+		
+		System.out.println("--------------------------------------");
+		String promptId = "Select an ID # to approve or deny the request: ";
+		int transferId = console.getUserInputInteger(promptId);
+		Transfer transferDetails = new Transfer();
+		transferDetails.setTransferId(transferId);
+		System.out.println(ts.viewTransferDetailsByTransferId(transferDetails.getTransferId()).printTransferDetails(transferDetails));
 
 		System.out.println("--------------------------------------");
-		System.out.println("Give Us A Break!");
+		System.out.println("These are your options.  Choose carefully.");		
+		System.out.println("--------------------------------------");
+		System.out.println("1: Approve");
+		System.out.println("--------------------------------------");
+		System.out.println("2: Reject");
+		System.out.println("--------------------------------------");			
+		System.out.println("0: DO NOTHING");		
+		System.out.println("--------------------------------------");	
+	
+		String userSelection = "I REPEAT: CHOOSE WISELY: ";
+		int userSelectionNumber = console.getUserInputInteger(userSelection);
+		
+		if (userSelectionNumber == 1) {
+
+		System.out.println("--------------------------------------");
+		System.out.println("Too bad!");		
+		System.out.println("--------------------------------------");
+
+			
+		} else if (userSelectionNumber == 2) {
+			
+		System.out.println("--------------------------------------");
+		System.out.println("Lol Nope");		
+		System.out.println("--------------------------------------");
+			
+		} else {
+			
+		System.out.println("--------------------------------------");
+		System.out.println("Wrong choice");		
+		System.out.println("--------------------------------------");
+			
+		}
+	
 		System.out.println("--------------------------------------");
 		System.out.println("ThANks HaVE A GReaT DAy!");	
+		System.out.println("--------------------------------------");
+		System.out.println("At TEnmo®, we don't rest until your money is our money™");	
 		System.out.println("--------------------------------------");
 		System.out.println("Please visit http://localhost/8080/catcards/random");
 		System.out.println("--------------------------------------");	
